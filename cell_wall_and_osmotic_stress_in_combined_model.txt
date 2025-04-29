@@ -1,0 +1,193 @@
+##Cell wall and osmotic stress simulation
+nodes:
+- WSCs #WSC1 and WSC3 receptors
+- Rom2 #GEF for Rho1 
+- Rho1 #GTPase in the CWI pathway
+- PkcA #Protein kinase C 
+- Bck1 #MAPKKK in CWI pathway 
+- Mkk2 #MAPKK in CWI pathway
+- MpkA #MAPK in CWI patwhay 
+- RlmA #Transcription factor, operating downstream of CWI signalling 
+- Bem2 #Rho1 GTPase activating protein (GAP)
+- Sac7 #Rho1 Guanine exchange factor (GEF)
+- MidA #Cell surface stress sensor and a Ca2+ channel
+- cchA #Calcium channel 
+- shoAg #Gene of ShoA osmotic stress sensor (alternative sensor, function is not well described in A. fumigatus)
+- fks1 #1,3-β-glucan synthase catalytic subunit 
+- calmodulin #Calcium-binding signalling protein
+- calcineurin #Calcium and calmodulin dependent protein phosphatase
+- sitA #Protein dephosphatase which activates ZipD TF
+- crzA #Transcription factor activated downstream of calcium-dependent signalling
+- zipD #Transcription factor activated downstream of calcium-dependent signalling
+- cmdAg # gene encoding calmodulin is upregulated by both CrzA and ZipD 
+- uge4g ##UDP-glucose 4-epimerase gene
+- gelAg # 1,3-β-glucanosyltransferase with a role in elongation of 1,3-beta-glucan chains gene
+- chs5g ## 1,3-β-glucanosyltransferase with a role in elongation of 1,3-beta-glucan chains gene
+- pmc1g #PmcA gene which encodes for Pmc1 Ca2+ transporters 
+- cbpAg #gene encoding calcineurin binding protein 
+- NikA #histidine kinase (HOG pathway) 
+- PhkA #alternative histidine kinase receptor
+- PhkB #alternative histidine kinase receptor
+- YpdA #histidine-containing phosphotransfer protein (HOG pathway)
+- Skn7 #response regulator (Oxidative stress pathway)
+- sskA #response regulator (HOG pathway)
+- sskB #MAPKKK in HOG pathway 
+- pbsB #MAPKK in HOG pathway
+- sakA #MAPK in HOG pathway
+- MpkC #MAP kinase activated downstream of HOG signalling 
+- PKA #Protein kinase A 
+- agsAg #enzyme involved in the biosynthesis of alpha-1,3-glucan
+- agsCg #enzyme involved in the synthesis of alpha-glucan
+- chsAg # Chitin Synthase A
+- chsCg # Chitin synthase C 
+- CreA #TF regulated by PKA
+- gsyA #glycogen synthase gene
+- gbdA #glycogen debranching enzyme gene 
+- tpsB # trehalose-6-phosphate synthase
+- srb1 #GDP-mannose pyrophosphorylase (cell wall biosynthesis) 
+- erg13 #enzyme involved in ergosterol biosynthesis for the cell wall
+- agm1 #enzyme involved in chitin biosynthesis for the cell wall
+- cyp5 #enzyme involved in ergosterol biosynthesis for the cell wall
+- cyp51B #enzyme involved in ergosterol biosynthesis for the cell wall
+- gel4 #enzyme with the role in beta(1,3)glucan production for the cell wall
+- glfA # UDP-galactopyranose mutase
+- gel4g # protein which has β(1-3)glucanosyltransferase activity
+- AtfA # TFs activated downstream of HOG
+- AtfB
+- AtfC
+- AtfD
+- OsrA #osmotic stress regulator gene
+- DprB #gene encoding dehydrin-like proteins which play a role in osmotic and oxidative stress
+- GpaB #gene encoding G protein alpha subunit involved in cAMP signal transduction
+- AcyA # gene that encodes adenylate cyclase enzyme
+- DprA # gene encoding dehydrin-like proteins which play a role in osmotic and oxidative stress
+- ptcB #HOG response phosphatase 
+- SchA #serine-threonine kinase of AGC family
+update rules: 
+  WSCs: WSCs
+  Bem2: Sac7
+  Sac7: Bem2 
+  Rom2: MidA or (MidA and WSCs) #  mainly MidA under oxidative stress, heat shock, cell wall damage
+  Rho1: Rom2 or fks1 and not Bem2 and not Sac7
+  PkcA: Rho1 and not MpkA
+  Bck1: PkcA
+  fks1: MpkC or RlmA and (not crzA or not zipD) 
+  Mkk2: Bck1
+  MpkA: Mkk2 or (sakA and MpkC) and (not zipD or not ptcB)
+  RlmA: MpkA
+  MidA: MidA
+  cchA: MidA and not calcineurin #The calcium channel CchA is negatively regulated by calcineurin
+  calmodulin: cchA and MidA
+  calcineurin: calmodulin
+  sitA: calcineurin
+  zipD: sitA 
+  crzA: calcineurin or sakA
+  pmc1g: crzA    
+  cmdAg: crzA or zipD  
+  cbpAg: zipD  
+  shoAg: not crzA or not zipD 
+  uge4g: not crzA or not zipD 
+  gelAg: not crzA or not zipD 
+  chs5g: not crzA or not zipD
+  NikA: NikA
+  PhkA: PhkA or crzA
+  PhkB: PhkB and (not crzA or not zipD)
+  YpdA: NikA or PhkA or PhkB 
+  Skn7: YpdA
+  sskA: YpdA and (not crzA or not zipD)
+  sskB: sskA or crzA
+  pbsB: sskB and not crzA 
+  sakA: pbsB and (not zipD or not ptcB or not SchA)
+  MpkC: pbsB  
+  PKA: sakA or AcyA
+  CreA: PKA
+  agsAg: RlmA
+  agsCg: RlmA
+  chsAg: RlmA
+  chsCg: RlmA
+  gsyA: CreA
+  gbdA: CreA
+  tpsB: sakA or MpkC
+  srb1: MpkC or (sakA and not zipD)
+  erg13: sakA
+  agm1: sakA
+  cyp5: sakA
+  cyp51B: sakA
+  gel4:  RlmA or sakA 
+  glfA: sakA
+  gel4g: RlmA
+  AtfA: sakA or PKA
+  AtfB: sakA
+  AtfC: sakA
+  AtfD: sakA
+  OsrA: sakA
+  DprB: OsrA
+  GpaB: GpaB
+  AcyA: GpaB
+  DprA: AtfA
+  ptcB: sakA
+  SchA: sakA
+initial state:
+  WSCs: any
+  MidA: any
+  NikA: any
+  PhkA: any
+  PhkB: any
+  GpaB: any
+  AcyA: 0
+  cchA: 0
+  cmdAg: 1
+  shoAg: 1
+  uge4g: 1
+  gelAg: 1
+  chs5g: 1 
+  pmc1g: 1
+  cbpAg: 1
+  fks1: 0
+  YpdA: 0
+  Skn7: 0
+  Rom2: 0
+  Rho1: 0
+  PkcA: 0
+  Bck1: 0
+  Mkk2: 0
+  MpkA: 0
+  RlmA: 0
+  Bem2: 0
+  Sac7: 0
+  calmodulin: 0
+  calcineurin: 0
+  sitA: 0 
+  crzA: 0
+  zipD: 0
+  sakA: 0 
+  sskB: 0
+  sskA: 0
+  pbsB: 0
+  MpkC: 0 
+  PKA: 0 
+  agsAg: 0
+  agsCg: 0  
+  chsAg: 0
+  chsCg: 0
+  CreA: 0 
+  gsyA: 0
+  gbdA: 0
+  tpsB: 0
+  srb1: 0
+  erg13: 0
+  agm1: 0
+  cyp5: 0
+  cyp51B: 0
+  gel4: 0 
+  glfA: 0
+  gel4g: 0
+  AtfA: 0
+  AtfB: 0
+  AtfC: 0
+  AtfD: 0
+  OsrA: 0
+  DprB: 0
+  DprA: 0
+  ptcB: 0
+  SchA: 0
